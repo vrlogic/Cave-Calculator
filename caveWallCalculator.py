@@ -10,13 +10,19 @@ choice = vizinput.choose("Choose a system to calculate:", ["cave", "powerwall"])
 ############
 ####Cave####
 ############
-		
-if choice == 0:
-	wallHeight = vizinput.input("Enter the wall height:")
-	wallWidth = vizinput.input("Enter the wall width:")
 
-	if wallHeight == "" or wallWidth == "":
-		vizinput.message('There was no data recorded!\nThe programm will close now.')
+if choice == 0:
+	loop = True
+	while loop == True:	
+		wallHeight = vizinput.input("Enter the wall height:")
+		wallWidth = vizinput.input("Enter the wall width:")
+
+		if wallHeight == "" or wallWidth == "":
+			vizinput.message("Error, there was no data recorded. Please enter a value.")
+			loop = True
+			
+		else:
+			loop = False
 		
 	distance = float(wallWidth) / 2
 
@@ -30,8 +36,17 @@ if choice == 0:
 		b = float(wallWidth)
 
 	else:
-		centerInput = vizinput.input('Enter the distance between front and tracker origin:')
+		loop = True
+		while loop == True:
+			centerInput = vizinput.input('Enter the distance between front and tracker origin:')
 		
+			if centerInput == "":
+				vizinput.message("Error, there was no data recorded. Please enter a value.")
+				loop = True
+				
+			else:
+				loop = False
+				
 		a = float(wallHeight)
 		b = float(wallWidth)
 		c = float(centerInput)
@@ -265,6 +280,7 @@ if choice == 0:
 		loRiRigZ = -(b - c)
 		lowerRightRig = [loRiRigX, loRiRigY, loRiRigZ]
 
+
 	saveName = vizinput.input("Name the file:\n(leave blank for default)")
 
 	if saveName == "":
@@ -306,7 +322,7 @@ if choice == 0:
 	textFile.write("<lowerRight>"+ str(loRiRigX) + " " +  str(loRiRigY) + " " +  str(loRiRigZ) + " " +  "</lowerRight>\n")
 	textFile.write("</wall>\n")
 	textFile.write("</vizcave>\n")
-
+	
 	answerCave2 = vizinput.ask("Do you want to get a graphical representation?")
 
 	if answerCave2 == 1:
@@ -383,13 +399,20 @@ if choice == 0:
 ##################
 		
 elif choice == 1:
-	wallHeight2 = vizinput.input("Enter the wall height:")
-	wallWidth2 = vizinput.input("Enter the wall width:")
-	
-	if wallHeight2 == "" or wallWidth2 == "":
-		vizinput.message('There was no data recorded!\nThe programm will close now.')
+	loop = True
+	while loop == True:
+		wallHeight2 = vizinput.input("Enter the wall height:")
+		wallWidth2 = vizinput.input("Enter the wall width:")
+		offsetInput = vizinput.input("Enter the distance between floor and lower display edge:")
 		
-	answerPoWa1 = vizinput.ask("The recommended tracker origin is 1 meters from the wall. Do you want to keep it?")
+		if wallHeight2 == "" or wallWidth2 == "" or offsetInput == "":
+			vizinput.message("Error, there was no data recorded. Please enter a value.")
+			loop = True
+			
+		else:
+			loop = False
+	
+	answerPoWa1 = vizinput.ask("The recommended tracker origin is 1 meters from the wall.\nDo you want to keep it?")
 	
 	if answerPoWa1 == 1:
 		f = 1.0
@@ -399,14 +422,20 @@ elif choice == 1:
 		e = float(wallWidth2)
 		
 	else:
-		centerInput2 = vizinput.input("Enter the distance between wall and tracker origin:")
-		
+		loop = True
+		while loop == True:
+			centerInput2 = vizinput.input("Enter the distance between wall and tracker origin:")
+			
+			if centerInput2 == "":
+				vizinput.message("Error, there was no data recorded. Please enter a value.")
+				loop = True
+			else:
+				loop = False
+
 		d = float(wallHeight2)
 		e = float(wallWidth2)
 		f = float(centerInput2)
 		
-	offsetInput = vizinput.input("Enter the distance between floor and lower display edge:")
-	
 	h = float(offsetInput)
 		
 	V = round(math.sqrt((d*d) / 2))
@@ -435,6 +464,16 @@ elif choice == 1:
 	loRiPowZ = f
 	lowerRightPow = [loRiPowX, loRiPowY, loRiPowZ]
 	
+	saveName2 = vizinput.input("Name the file:\n(leave blank for default)")
+
+	if saveName2 == "":
+		saveName2 = "powerwall_settings"
+		
+	textFile2 = open("./" + saveName2 + ".txt","w")
+	textFile2.write("The following shows the coordinats for a powerwall 45 degrees tilted.\n\n")
+	textFile2.write("Upper left corner: "+str(upperLeftPow)+"\nUpper right corner: "+str(upperRightPow))
+	textFile2.write("\nLower left corner: "+str(lowerLeftPow)+"\nUpper right corner: "+str(lowerRightPow))
+	textFile2.write("\n\n\nNote:\nThis shows only the coordinats and can not be used as a configuration file.")
 
 	answerPoWa2 = vizinput.ask("Do you want to get a graphical representation?")
 
